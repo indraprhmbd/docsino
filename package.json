@@ -1,7 +1,7 @@
 {
   "name": "docsino",
   "version": "0.0.1",
-  "description": "Organize docs/ by feature, not by accident. Documentation organizer for Next.js projects.",
+  "description": "Organize Next.js documentation by feature. Auto-classifies markdown files into docs/<feature>/ directories based on your project structure.",
   "type": "module",
   "bin": {
     "docsino": "./dist/index.js"
