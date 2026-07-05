@@ -70,9 +70,21 @@ Not for you if: you have 3 markdown files, you use a dedicated documentation pla
 
 ## Install
 
+**Primary -- global install (recommended)**
+
 ```bash
 npm install -g docsino
 ```
+
+Then run `docsino` from any project.
+
+**Alternative -- run without installing**
+
+```bash
+npx docsino
+```
+
+Always runs the latest version. Slightly slower first invocation (npm resolution), negligible for docsino's workload.
 
 Requires Node.js 22.12 or later.
 
