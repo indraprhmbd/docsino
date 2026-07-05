@@ -1,7 +1,7 @@
 {
   "name": "docsino",
   "version": "0.0.1",
-  "description": "Repository-aware documentation organizer",
+  "description": "Organize docs/ by feature, not by accident. Documentation organizer for Next.js projects.",
   "type": "module",
   "bin": {
     "docsino": "./dist/index.js"
@@ -16,12 +16,12 @@
     "test:watch": "vitest",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@clack/prompts": "latest",
     "commander": "^15.0.0",
-    "okapibm25": "latest",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
@@ -34,5 +34,22 @@
   "engines": {
     "node": ">=22.12.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "author": "indraprhmbd",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indraprhmbd/docsino.git"
+  },
+  "bugs": {
+    "url": "https://github.com/indraprhmbd/docsino/issues"
+  },
+  "homepage": "https://github.com/indraprhmbd/docsino#readme",
+  "keywords": [
+    "docs",
+    "documentation",
+    "nextjs",
+    "organizer",
+    "cli",
+    "feature-sliced"
+  ]
 }

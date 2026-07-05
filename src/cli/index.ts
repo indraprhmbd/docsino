@@ -14,10 +14,11 @@ program
 
 program
   .command('organize')
-  .description('Classify and organize documentation files')
+  .description('Auto-classify and move docs into feature folders')
   .option('--dir <path>', 'Documentation directory', './docs')
   .option('--threshold <number>', 'Confidence threshold', '55')
-  .option('--no-dry-run', 'Actually move files')
+  .option('--apply', 'Actually move files (default: dry-run)')
+  .option('--no-interactive', 'Skip interactive prompts')
   .option('--verbose', 'Detailed output')
   .option('--json', 'JSON output')
   .action(async (opts) => {
@@ -25,9 +26,10 @@ program
       await organize({
         dir: opts.dir,
         threshold: Number(opts.threshold),
-        dryRun: opts.dryRun,
+        apply: opts.apply,
         verbose: opts.verbose,
         json: opts.json,
+        interactive: opts.interactive,
       });
     } catch (err) {
       console.error(err instanceof Error ? err.message : String(err));
@@ -37,10 +39,11 @@ program
 
 program
   .command('audit')
-  .description('Scan documentation tree for issues')
+  .description('Check organized docs for misplacements, fix with --fix')
   .option('--dir <path>', 'Documentation directory', './docs')
   .option('--threshold <number>', 'Confidence threshold', '55')
   .option('--fix', 'Auto-fix misplaced documentation')
+  .option('--no-interactive', 'Skip interactive prompts')
   .option('--verbose', 'Detailed output')
   .option('--json', 'JSON output')
   .action(async (opts) => {
@@ -51,6 +54,7 @@ program
         verbose: opts.verbose,
         json: opts.json,
         fix: opts.fix,
+        interactive: opts.interactive,
       });
     } catch (err) {
       console.error(err instanceof Error ? err.message : String(err));

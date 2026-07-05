@@ -37,8 +37,10 @@ describe('tokenizeWithWeights', () => {
 
   it('boosts code fence tokens', () => {
     const result = tokenizeWithWeights('use `createUser` function');
-    const createUser = result.filter((t) => t === 'createuser');
-    expect(createUser.length).toBeGreaterThanOrEqual(2);
+    const create = result.filter((t) => t === 'create');
+    expect(create.length).toBeGreaterThanOrEqual(2);
+    const user = result.filter((t) => t === 'user');
+    expect(user.length).toBeGreaterThanOrEqual(2);
   });
 
   it('extracts import paths', () => {

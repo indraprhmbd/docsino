@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, writeFileSync, rmSync, mkdtempSync } from 'node:fs';
+import { writeFileSync, rmSync, mkdtempSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
@@ -21,6 +21,11 @@ beforeEach(() => {
       ['TeamCard', '/src/features/teams/components/TeamCard.tsx'],
       ['DocumentList', '/src/features/documents/components/DocumentList.tsx'],
     ]),
+    featureTokens: new Map([
+      ['auth', ['auth', 'login', 'loginform', 'credential', 'session', 'token', 'password']],
+      ['teams', ['teams', 'manage', 'teamcard', 'member', 'workspace', 'role', 'invite']],
+      ['documents', ['documents', 'list', 'documentlist', 'file', 'upload', 'share', 'permission']],
+    ]),
   };
 });
 
@@ -29,30 +34,57 @@ afterEach(() => {
 });
 
 describe('classifyFile', () => {
-  it('classifies a doc to the correct feature', () => {
+  it('pre-classifies by filename when feature name is substring', () => {
+    const filepath = join(tmpDir, 'auth-doc.md');
+    writeFileSync(filepath, 'some content');
+
+    const result = classifyFile(filepath, 'auth-doc.md', index);
+    expect(result.feature).toBe('auth');
+    expect(result.confidence).toBe(100);
+    expect(result.evidence[0]?.token).toBe('filename-dice');
+  });
+
+  it('falls to scorer when filename has no feature match', () => {
+    const filepath = join(tmpDir, 'random-content.md');
+    writeFileSync(filepath, '# Auth guide\nlogin stuff');
+
+    const result = classifyFile(filepath, 'random-content.md', index);
+    expect(result.evidence[0]?.token).not.toBe('filename-dice');
+  });
+
+  it('picks earliest match when filename has multiple features', () => {
+    const filepath = join(tmpDir, 'auth-teams-guide.md');
+    writeFileSync(filepath, 'some content');
+
+    const result = classifyFile(filepath, 'auth-teams-guide.md', index);
+    expect(result.feature).toBe('auth');
+    expect(result.confidence).toBe(100);
+  });
+
+  it('classifies a doc to the correct feature via scorer', () => {
     const content = [
       '# Authentication',
       '',
       'Users can log in using their email and password.',
       'The LoginForm component handles form submission.',
-      'See `app/auth/login` for the route implementation.',
+      'See `auth/login` for the route implementation.',
     ].join('\n');
 
-    const filepath = join(tmpDir, 'auth-guide.md');
+    const filepath = join(tmpDir, 'guide.md');
     writeFileSync(filepath, content);
 
-    const result = classifyFile(filepath, 'auth-guide.md', index);
+    const result = classifyFile(filepath, 'guide.md', index);
     expect(result.feature).toBe('auth');
     expect(result.confidence).toBeGreaterThanOrEqual(0);
     expect(result.ranking.length).toBeGreaterThanOrEqual(1);
     expect(result.evidence.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('returns uncategorized for empty doc', () => {
-    const filepath = join(tmpDir, 'empty.md');
+  it('returns uncategorized for empty doc with no filename match', () => {
+    const filepath = join(tmpDir, 'unknown.md');
     writeFileSync(filepath, '');
 
-    const result = classifyFile(filepath, 'empty.md', index);
+    const result = classifyFile(filepath, 'unknown.md', index);
     expect(result).toHaveProperty('feature');
     expect(result).toHaveProperty('confidence');
   });

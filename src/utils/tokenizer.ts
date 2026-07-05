@@ -12,8 +12,27 @@ const STOP_WORDS = new Set([
   'module',
 ]);
 
+export function diceTokens(s: string): Set<string> {
+  return new Set(
+    s.toLowerCase()
+      .split(/[-_.\s]+/)
+      .filter(t => t.length > 0)
+  );
+}
+
+export function diceCoefficient(a: string, b: string): number {
+  const setA = diceTokens(a);
+  const setB = diceTokens(b);
+  const intersection = new Set([...setA].filter(t => setB.has(t)));
+  const denom = setA.size + setB.size;
+  if (denom === 0) return 0;
+  return (2 * intersection.size) / denom;
+}
+
 export function tokenize(text: string): string[] {
   return text
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
     .replace(/[^A-Za-z0-9]/g, ' ')
     .split(/\s+/)
     .filter(Boolean)
