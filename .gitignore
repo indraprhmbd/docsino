@@ -1,0 +1,4 @@
+node_modules
+dist
+.docsino-index.json
+.docsino-learning.json
