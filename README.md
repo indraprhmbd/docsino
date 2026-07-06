@@ -7,7 +7,7 @@ Documentation organizer for Next.js projects. Reads markdown files, analyzes the
 [![npm version](https://img.shields.io/npm/v/docsino?style=flat&color=blue)](https://www.npmjs.com/package/docsino)
 [![License](https://img.shields.io/github/license/indraprhmbd/docsino?style=flat&color=green)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D22.12.0-brightgreen?style=flat)](package.json)
-
+[![Socket Badge](https://badge.socket.dev/npm/package/docsino/0.0.1)](https://badge.socket.dev/npm/package/docsino/0.0.1) 
 ---
 
 Contents
